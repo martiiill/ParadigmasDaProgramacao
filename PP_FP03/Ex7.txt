@@ -1,0 +1,13 @@
+        int valor1, valor2, resultado, resto, total;
+        valor1 = Integer.parseInt(args[0]);
+        valor2 = Integer.parseInt(args[1]);
+
+        resultado = (int) (valor1 * (Math.pow(valor2, -1)));
+
+        total = resultado * valor2;
+        resto = valor1 - total;
+        if (resto != 0) {
+            System.out.print(resultado + "," + resto);
+        } else {
+            System.out.print(resultado);
+        }

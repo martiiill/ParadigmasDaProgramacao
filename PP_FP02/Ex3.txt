@@ -1,0 +1,16 @@
+	int[] lista = {12, 5, -21, 10, -345, 22, 50, -125, 80, -1};
+        int multiplicacao = 1, contador = 0, maior = 0;
+
+        for (int i = 0; i < lista.length; i++) {
+            if (lista[i] > 0) {
+                multiplicacao = multiplicacao * lista[i];
+            } else {
+                contador = contador + 1;
+            }
+            if (lista[i] > maior) {
+                maior = lista[i];
+            }
+        }
+        System.out.println("O resultado da multiplicacao dos elementos positivos é de " + multiplicacao + ".\n"
+                + "Existem " + contador + " elementos negativos.\n"
+                + "O maior numero é o " + maior + ".");

@@ -1,0 +1,24 @@
+        int[] vetor = {2, 10, 55, 23, 70, 12, 15, 22, 23, 11, 0, 6, 28, 12, 5};
+        int numero = 0, soma = 0, contadorPrimos = 0;
+
+        for (int i = 0; i < vetor.length; i++) {
+            numero = vetor[i];
+            soma = 0;
+            for (int j = 1; j <= numero; j++) {
+                if (numero % j == 0) {
+                    contadorPrimos = contadorPrimos + 1;
+                }
+            }
+            soma = 0;
+            for (int j = 1; j <= numero - 1; j++) {
+                if (numero % j == 0) {
+                    soma = soma + j;
+                }
+            }
+            if (contadorPrimos == 2) {
+                System.out.println("O numero " + vetor[i] + " é primo.\n");
+            }
+            if (soma == numero) {
+                System.out.println("O numero " + numero + " é perfeito.");
+            }
+        }

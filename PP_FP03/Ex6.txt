@@ -1,0 +1,7 @@
+        int numero, numeroEuros = 0, numeroCentimos = 0;
+        numero = Integer.parseInt(args[0]);
+
+        numeroEuros = numero / 100;
+        numeroCentimos = numero % 100;
+
+        System.out.println(numeroEuros + " euros e " + numeroCentimos + " centimos");
