@@ -1,5 +1,0 @@
-      float valor_graus, valor_radianos;
-        valor_graus = Integer.parseInt(args[0]);
-        valor_radianos = (float) (valor_graus * (PI / 180));
-
-        System.out.println("O valor em radianos e " + valor_radianos);
