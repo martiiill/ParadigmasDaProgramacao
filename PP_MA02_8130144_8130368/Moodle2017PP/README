@@ -1,0 +1,24 @@
+-- Configuração do projeto NetBeans para resolução do trabalho prático --
+Quando criar o projeto, deverá adicionar as seguintes bibliotecas:
+- lwjgl.jar
+- slick.jar
+- jinput.jar
+- lwjgl_util.jar
+- jogg-0.07.jar
+- jorbis-0.0.1.5.jar
+- AlloyEngine.jar
+- 2017.MA02.PP.Resources.jar
+
+Para além do passo anterior, deverá aceder à pasta natives e escolher a pasta respetiva ao seu sistema operativo. 
+Copie a respetiva pasta para a pasta lib. De seguida, aceda às propriedades do projeto, selecione: run e em VM Options adicione:
+-Djava.library.path="caminho para a pasta copiada no ponto anterior. Esta pasta não pode ter caracteres especiais", por exemplo: 
+-Djava.library.path="/Users/PP/NetBeansProjects/projetoNetbeans/lib/macosx" (no caso de macosx). É aconselhável a utilização do caminho absoluto para esta configuração.
+
+Considerações:
+- Os caminhos para os conteúdos devem ser relativos. 
+- Deve ter em atenção que o caminho para os conteúdos não possua caracteres especiais (por exemplo: &, º,ç, etc)
+- Se ocorrer o seguinte erro na execu?o: Failed to initialise the LWJGL display, adicionar em propriedades do projeto, run e em VM Options:
+-Dorg.lwjgl.opengl.Display.allowSoftwareOpenGL=true
+
+Exemplo:
+-Djava.library.path="PATH_TO" -Dorg.lwjgl.opengl.Display.allowSoftwareOpenGL=true
