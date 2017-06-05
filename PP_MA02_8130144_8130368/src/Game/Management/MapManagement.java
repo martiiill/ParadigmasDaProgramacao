@@ -25,9 +25,41 @@ import java.util.logging.Logger;
  */
 public class MapManagement implements MapManagementContract, Serializable {
 
+    /**
+     * {@link ListManagement objetos} existentes no 
+     * {@link MapManagement gestor de entradas}.
+     */
     private ListManagement man;
+    /**
+     * Número de objetos presentes no {@link MapManagement gestor de entradas}.
+     */
     private int numberOfMaps;
+    
+    /**
+     * Método construtor que permite instanciar 
+     * {@link MapManagement gestor de entradas}.
+     * @param man {@link ListManagement objetos} existentes no 
+     * {@link MapManagement gestor de entradas}.
+     * @param numberOfMaps Número de objetos presentes no 
+     * {@link MapManagement gestor de entradas}.
+     */
+    public MapManagement(ListManagement man, int numberOfMaps) {
+        this.man = man;
+        this.numberOfMaps = numberOfMaps;
+    }
+    
+    /**
+     * Método construtor que permite instanciar {@link MapManagement}
+     * @param man Número de objetos presentes no 
+     * {@link MapManagement gestor de entradas}.
+     */
+    public MapManagement(ListManagement man) {
+        this.man = man;
+    }
 
+    /**
+     * Método construtor que permite instanciar {@link MapManagement}.
+     */
     public MapManagement() {
         this.man = new ListManagement();
     }
@@ -57,14 +89,14 @@ public class MapManagement implements MapManagementContract, Serializable {
 
     /**
      * Método responsável por verificar pela navegação entre as
-     * {@link MapEntry entradas} do mapa
+     * {@link MapEntry entradas} do mapa.
      *
      * @return Valor que sinaliza o se existe/não existe animação seguinte
      */
     @Override
     public boolean hasNext() {
         for (int i = 0; i < this.numberOfMaps; i++) {
-            return man.getObjects() != null;
+            return this.man.getObjects() != null;
         }
         return false;
     }
@@ -79,7 +111,6 @@ public class MapManagement implements MapManagementContract, Serializable {
      */
     @Override
     public MapEntryContract next() throws EndOfCollectionException {
-
         while (hasNext()) {
             for (int i = 0; i < this.man.getNumberOfObjects(); i++) {
                 return (MapEntryContract) this.man.getObjects()[i];
@@ -98,15 +129,14 @@ public class MapManagement implements MapManagementContract, Serializable {
      */
     @Override
     public Object getByKey(Object o) throws KeyNotFoundException {
-
         while (hasNext()) {
             try {
                 MapEntry map = (MapEntry) next();
-                if (this.man.hasObject(map.getKey()) && map.getKey() != null) {
+                if (this.man.hasObject(map.getKey()) == false) {
                     return map.getValue();
                 } else {
-                    return null;
-                }
+                    System.out.println("Nao deu");
+                } 
             } catch (EndOfCollectionException ex) {
                 Logger.getLogger(MapManagement.class.getName()).log(Level.SEVERE, 
                         null, ex);

@@ -11,9 +11,12 @@ package Game;
 
 import Game.Management.ListManagement;
 import Resources.Exceptions.DuplicateLevelsId;
+import Resources.Exceptions.FileHandlingException;
 import Resources.GameContainerContract;
 import Resources.GameLevelContract;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe responsável por definir o conteúdo de um jogo, organizado em diversos
@@ -21,9 +24,24 @@ import java.io.Serializable;
  */
 public class GameContainer implements GameContainerContract, Serializable {
 
+    /**
+     * O {@link GameContainer#name nome} do jogo.
+     */
     private String name;
+    /**
+     * Valor booleano sinalizando a utilização/não utilização do
+     * {@link GameContainer#debugMode modo de depuração}.
+     */
     private boolean debugMode;
+    /**
+     * {@link ListManagement lista} de objetos que contém.
+     */
     private ListManagement list;
+    /**
+     * Intancia do {@link GameContainer} para que se consiga instanciar o 
+     * objeto.
+     */
+    private static GameContainer containerInstance = null;
 
     /**
      * Método construtor que permite criar uma instância. Tem de ser privado, se
@@ -32,24 +50,54 @@ public class GameContainer implements GameContainerContract, Serializable {
      * @param name O {@link GameContainer#name nome} do jogo.
      * @param debugMode O {@link GameContainer#debugMode modo de depuração}.
      */
-    public GameContainer(String name, boolean debugMode) {
+    private GameContainer() {}
+
+    /**
+     * Método que permite atribuir valores da classe, depois da instanciação.
+     *
+     * @param name O {@link GameContainer#name nome} do jogo.
+     * @param debugMode Valor booleano sinalizando a utilização/não utilização
+     * do {@link GameContainer#debugMode modo de depuração}.
+     */
+    public void inicializar(String name, boolean debugMode) {
         this.name = name;
         this.debugMode = debugMode;
+        this.list = new ListManagement();
+        
+    }
+    
+     /**
+     * Método que permite atribuir valores da classe, depois da instanciação.
+     *
+     */
+    public void inicializar() {
         this.list = new ListManagement();
     }
 
     /**
-     * Este método permite obter uma só instância desta classe.
+     * Este método permite obter uma só instância desta classe.Synchronized de
+     * forma a evitar o StatckOverFlow.
      *
      * @return instância desta classe.
      */
-//    public static GameContainer getInstance() {
-//        return containerInstance;
-//    }
-//    
-//     private static final GameContainer containerInstance
-//            = new GameContainer(getInstance().name, getInstance().debugMode, getInstance().level);
-//
+    public static synchronized GameContainer getInstance() {
+        if (containerInstance == null) {
+            containerInstance = new GameContainer();           
+        }
+        return containerInstance;
+    }
+    
+     /**
+     * Método que permite gravar num ficheiro um {@link GameContainer conteudo}
+     * do jogo.
+     * @param gc O {@link GameContainer conteudo} do jogo a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save(GameContainer gc) throws FileHandlingException{
+        Store s = new Store();
+        s.saveToFile(gc, "fic.txt");
+    }
+
     /**
      * Método responsável por adicionar um novo {@link Level nível}.
      *
@@ -60,7 +108,6 @@ public class GameContainer implements GameContainerContract, Serializable {
      */
     @Override
     public boolean addNewLevel(GameLevelContract glc) throws DuplicateLevelsId {
-
         if (this.list.hasObject(glc) == true) {
             throw new DuplicateLevelsId("Já existe um nível igual.");
         } else {
@@ -76,11 +123,10 @@ public class GameContainer implements GameContainerContract, Serializable {
      * @return Valor booleano que sinaliza o sucesso/insucesso da operação.
      */
     @Override
-    public boolean removeLevel(GameLevelContract glc
-    ) {
+    public boolean removeLevel(GameLevelContract glc) {
         int position = this.list.findObject(glc);
         if (position != -1) {
-            this.list.addObject(glc);
+            this.list.removeObject(position);
             return true;
         } else {
             return false;
@@ -158,10 +204,9 @@ public class GameContainer implements GameContainerContract, Serializable {
 
     @Override
     public String toString() {
-        return "GameContainer{" + "name=" + name + ", debugMode=" + debugMode + ", list=" + list + '}';
+        return "GameContainer{" + "name=" + name + ", debugMode=" + debugMode
+                + ", list=" + list + '}';
     }
-
-    
 
     public void gameContainerDescription() {
         System.out.println(toString());

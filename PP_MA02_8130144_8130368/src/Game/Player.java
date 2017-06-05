@@ -12,6 +12,7 @@ package Game;
 import Game.Management.MapManagement;
 import Resources.Enums.PlayerMovementDirection;
 import Resources.Exceptions.DuplicateEntryException;
+import Resources.Exceptions.FileHandlingException;
 import Resources.Exceptions.KeyNotFoundException;
 import Resources.GameAnimationContract;
 import Resources.GamePlayerContract;
@@ -30,52 +31,83 @@ public class Player extends GameObject implements GamePlayerContract,
      */
     private boolean mapLimits;
     /**
-     *
+     * {@link MapManagement}
      */
     private MapManagement map;
 
     /**
-     * Método construtor que permite instanciar um {@link Player jogador} com
-     * animacoes.
+     * Método construtor que permite instanciar um {@link Player jogador}.
      *
-     * @param mapLimits
-     * @param name
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param collision
-     * @param collide
-     * @param colliding
-     * @param animation
+     * @param mapLimits Se o {@link Player jogador} pode ultrapassar os limites.
+     * @param name O {@link GameObject#name nome} do {@link GameObject objeto}.
+     * @param x A posição no eixo dos {@link GameObject#x xx} do
+     * {@link GameObject objeto}.
+     * @param y A posição no eixo dos {@link GameObject#y yy} do
+     * {@link GameObject objeto}.
+     * @param width A {@link GameObject#width largura} do
+     * {@link GameObject objeto}.
+     * @param height A {@link GameObject#height altura} do
+     * {@link GameObject objeto}.
+     * @param collision Valor booleano sinalizando se possui/não possui
+     * {@link GameObject#collision colisão}.
+     * @param collide Valor booleano sinalizando que está/não está
+     * {@link GameObject#collide em colisão}.
+     * @param colliding Configurações associadas à
+     * {@link GameObject#colliding colisão}.
+     * @param animation Uma {@link Animation animação} associado ao
+     * {@link GameObject objeto}.
      */
-    public Player(boolean mapLimits,
-            String name, int x, int y, int width, int height, boolean collision,
-            boolean collide, CollisionArea colliding, Animation animation) {
-        super(name, x, y, width, height, collision, collide, colliding,
-                animation);
-        this.mapLimits = mapLimits;
+    public Player(boolean mapLimits, String name, int x, int y, int width,
+            int height, boolean collision, boolean collide,
+            CollisionArea colliding, Animation animation) {
+        super(name, x, y, width, height, collision, collide, colliding);
         this.map = new MapManagement();
+        this.mapLimits = mapLimits;
     }
 
-   /**
-    * 
-    * @param mapLimits
-    * @param name
-    * @param x
-    * @param y
-    * @param width
-    * @param height
-    * @param collision
-    * @param collide
-    * @param colliding 
-    */ 
-    public Player(boolean mapLimits, String name, int x, int y, int width, 
-            int height, boolean collision, boolean collide, 
+    /**
+     * Método construtor que permite instanciar um {@link Player jogador}.
+     *
+     * @param mapLimits Se o {@link Player jogador} pode ultrapassar os limites.
+     * @param name O {@link GameObject#name nome} do {@link GameObject objeto}.
+     * @param x A posição no eixo dos {@link GameObject#x xx} do
+     * {@link GameObject objeto}.
+     * @param y A posição no eixo dos {@link GameObject#y yy} do
+     * {@link GameObject objeto}.
+     * @param width A {@link GameObject#width largura} do
+     * {@link GameObject objeto}.
+     * @param height A {@link GameObject#height altura} do
+     * {@link GameObject objeto}.
+     * @param collision Valor booleano sinalizando se possui/não possui
+     * {@link GameObject#collision colisão}.
+     * @param collide Valor booleano sinalizando que está/não está
+     * {@link GameObject#collide em colisão}.
+     * @param colliding Configurações associadas à
+     * {@link GameObject#colliding colisão}.
+     */
+    public Player(boolean mapLimits, String name, int x, int y, int width,
+            int height, boolean collision, boolean collide,
             CollisionArea colliding) {
         super(name, x, y, width, height, collision, collide, colliding);
         this.mapLimits = mapLimits;
         this.map = new MapManagement();
+    }
+
+    /**
+     * Método construtor que permite instanciar um {@link Player jogador}.
+     */
+    public Player() {
+        this.map = new MapManagement();
+    }
+    
+    /**
+     * Método que permite gravar num ficheiro um {@link Player jogador}.
+     * @param p O {@link Player jogador} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save (Player p ) throws FileHandlingException{
+        Store s = new Store();
+        s.saveToFile(p, "fic.txt");
     }
 
     /**
@@ -107,17 +139,16 @@ public class Player extends GameObject implements GamePlayerContract,
      * jogador. A associação deverá ser realizada através da classe de
      * mapeamento: {@link MapManagement mapeamento}.
      *
-     * @param pmd
-     * @param gac
+     * @param pmd {@link PlayerMovementDirection movimento} do jogador
+     * @param gac {@link Animation animação} a associar
      */
     @Override
     public void addAnimation(PlayerMovementDirection pmd,
             GameAnimationContract gac) {
         try {
             this.map.addEntry(pmd, gac);
-        } catch (DuplicateEntryException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE,
-                    null, ex);
+        } catch (DuplicateEntryException ex){
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE,null, ex);
         }
     }
 
@@ -129,7 +160,7 @@ public class Player extends GameObject implements GamePlayerContract,
      */
     @Override
     public String toString() {
-        return "Player{" + "mapLimits=" + mapLimits + ", map=" + map + '}';
+        return "Player: " + "mapLimits=" + mapLimits + ", map=" + map + '}';
     }
 
     /**
@@ -152,7 +183,7 @@ public class Player extends GameObject implements GamePlayerContract,
     @Override
     public GameAnimationContract getAnimation(PlayerMovementDirection pmd) {
         try {
-            return (GameAnimationContract) map.getByKey(pmd);
+            return (GameAnimationContract) this.map.getByKey(pmd);
         } catch (KeyNotFoundException ex) {
             ex.toString();
             return null;

@@ -11,9 +11,12 @@ package Game;
 
 import Game.Management.ListManagement;
 import Resources.Collection.ListManagementContract;
+import Resources.Exceptions.FileHandlingException;
 import Resources.GameObjectContract;
 import Resources.GameScenarioContract;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe responsável por representar a estrutura do cenário.
@@ -45,10 +48,13 @@ public class Scenario implements GameScenarioContract, Serializable {
      */
     private String backgroundMusic;
 
+    /**
+     * {@link ListManagement lista} de objetos.
+     */
     private ListManagement list;
 
     /**
-     * Método constutor que permite instancia um {@link Scenario cenário}.
+     * Método constutor que permite instanciar um {@link Scenario cenário}.
      *
      * @param id O identificador do {@link Scenario cenário}.
      * @param name O Nome do {@link Scenario cenário}.
@@ -56,16 +62,90 @@ public class Scenario implements GameScenarioContract, Serializable {
      * @param height A Altura do {@link Scenario cenário}.
      * @param backgroundImage O caminho para a imagem de fundo do
      * {@link Scenario cenário}.
+     * @param backgroundMusic O caminho para a musica de fundo do
+     * {@link Scenario cenário}.
      */
     public Scenario(int id, String name, int width, int height,
-            String backgroundImage) {
+            String backgroundImage, String backgroundMusic) {
         this.id = id;
         this.name = name;
         this.width = width;
         this.height = height;
         this.backgroundImage = backgroundImage;
-        this.backgroundMusic = "C:\\Users\\anaal\\Desktop\\PP_MA02_8130144_8130368\\music\\music.ogg";
+        this.backgroundMusic = backgroundMusic;
         this.list = new ListManagement();
+    }
+
+    /**
+     * Método constutor que permite instanciar um {@link Scenario cenário}.
+     *
+     * @param id O identificador do {@link Scenario cenário}.
+     * @param name O Nome do {@link Scenario cenário}.
+     * @param backgroundImage O caminho para a imagem de fundo do
+     * {@link Scenario cenário}.
+     */
+    public Scenario(int id, String name, String backgroundImage) {
+        this.id = id;
+        this.name = name;
+        this.width = 800;
+        this.height = 600;
+        this.backgroundImage = backgroundImage;
+        this.backgroundMusic = "Moodle2017PP\\assets\\music.ogg";
+        this.list = new ListManagement();
+    }
+
+    /**
+     * Método constutor que permite instanciar um {@link Scenario cenário}.
+     *
+     * @param id O identificador do {@link Scenario cenário}.
+     * @param name O Nome do {@link Scenario cenário}.
+     * @param backgroundImage O caminho para a imagem de fundo do
+     * {@link Scenario cenário}.
+     * @param backgroundMusic O caminho para a musica de fundo do
+     * {@link Scenario cenário}.
+     */
+    public Scenario(int id, String name,
+            String backgroundImage, String backgroundMusic) {
+        this.id = id;
+        this.name = name;
+        this.width = 800;
+        this.height = 600;
+        this.backgroundImage = backgroundImage;
+        this.backgroundMusic = backgroundMusic;
+        this.list = new ListManagement();
+    }
+
+    /**
+     * Método constutor que permite instanciar um {@link Scenario cenário}.
+     *
+     * @param id O identificador do {@link Scenario cenário}.
+     * @param name O Nome do {@link Scenario cenário}.
+     */
+    public Scenario(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.width = 800;
+        this.height = 600;
+        this.backgroundImage = "Moodle2017PP\\assets\\background.png";
+        this.backgroundMusic = "Moodle2017PP\\assets\\music.ogg";
+        this.list = new ListManagement();
+    }
+
+    /**
+     * Método constutor que permite instanciar um {@link Scenario cenário}.
+     */
+    public Scenario() {
+        this.list = new ListManagement();
+    }
+    
+    /**
+     * Método que permite gravar num ficheiro um {@link Scenario cenário}.
+     * @param s O {@link Scenario cenário} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save(Scenario s) throws FileHandlingException{
+        Store ss = new Store();
+        ss.saveToFile(s, "fic.txt");
     }
 
     /**
@@ -208,12 +288,19 @@ public class Scenario implements GameScenarioContract, Serializable {
      * Método responsável adicionar um {@link GameObject objeto} ao
      * {@link Scenario cenário}
      *
-     * @param goc O {@link Object objeto}.
+     * @param goc O {@link GameObject objeto} a adicionar.
      * @return Valor que sinaliza o sucesso/insucesso da operação
      */
     @Override
     public boolean addGameObject(GameObjectContract goc) {
+        Store s = new Store();
         if (this.list.hasObject(goc) == false) {
+            try {
+                s.saveToFile(goc, "fic.txt");
+            } catch (FileHandlingException ex) {
+                Logger.getLogger(Scenario.class.getName()).log(Level.SEVERE,
+                        null, ex);
+            }
             return this.list.addObject(goc);
         } else {
             return false;
@@ -242,13 +329,17 @@ public class Scenario implements GameScenarioContract, Serializable {
      */
     @Override
     public ListManagementContract colisionMapping() {
-        CollisionArea ca = new CollisionArea();
-        ListManagement m = new ListManagement(this.getNumberOfObjects());
+        ListManagement man = new ListManagement();
+        Store s = new Store();
         for (int i = 0; i < this.list.getNumberOfObjects(); i++) {
-            ca = (CollisionArea) this.list.getObject(i);
-            m.addObject(ca);
+            man.addObject(this.getGameObject(i).getCollision());
         }
-        return m;
+        try {
+            s.saveToFile(man, "collisionData.txt");
+        } catch (FileHandlingException ex) {
+            Logger.getLogger(Scenario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return man;
     }
 
     /**

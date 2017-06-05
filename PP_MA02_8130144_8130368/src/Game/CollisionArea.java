@@ -10,6 +10,7 @@
 
 package Game;
 
+import Resources.Exceptions.FileHandlingException;
 import Resources.GameCollisionRectangleContract;
 import java.io.Serializable;
 
@@ -48,20 +49,21 @@ public class CollisionArea implements GameCollisionRectangleContract,
      */
     private float paddingY;
 
+
     /**
-     * Método construtor que permite instanciar uma {@link CollisionRectangle 
+     * Método construtor que permite instanciar uma {@link CollisionArea 
      * àrea de colisão}.
-     * @param x Valor do eixo dos xx da {@link CollisionRectangle àrea de 
+     * @param x Valor do eixo dos xx da {@link CollisionArea àrea de 
      * colisão}.
-     * @param y Valor do eixo dos yy da {@link CollisionRectangle àrea de
+     * @param y Valor do eixo dos yy da {@link CollisionArea àrea de
      * colisão}.
-     * @param widht Largura da {@link CollisionRectangle àrea de colisão}.
-     * @param height Altura da {@link CollisionRectangle àrea de colisão}.
-     * @param radius Raio de alcance da {@link CollisionRectangle àrea de 
+     * @param widht Largura da {@link CollisionArea àrea de colisão}.
+     * @param height Altura da {@link CollisionArea àrea de colisão}.
+     * @param radius Raio de alcance da {@link CollisionArea àrea de 
      * colisão}.
-     * @param paddingX Preenchimento do eixo dos xx da {@link CollisionRectangle 
+     * @param paddingX Preenchimento do eixo dos xx da {@link CollisionArea 
      * àrea de colisão}.
-     * @param paddingY Preenchimento do exio dos yy da {@link CollisionRectangle 
+     * @param paddingY Preenchimento do exio dos yy da {@link CollisionArea 
      * àrea de colisão}.
      */
     public CollisionArea(int x, int y, int widht, int height, int radius, 
@@ -73,6 +75,17 @@ public class CollisionArea implements GameCollisionRectangleContract,
         this.radius = radius;
         this.paddingX = paddingX;
         this.paddingY = paddingY;
+    }
+    
+    /**
+     * Método que permite gravar num ficheiro uma {{@link CollisionArea 
+     * àrea de colisão}.
+     * @param ca A {@link CollisionArea àrea de colisão} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save(CollisionArea ca) throws FileHandlingException{
+        Store s = new Store();
+        s.saveToFile(ca, "collisionData.txt");
     }
     
     /**
@@ -112,7 +125,6 @@ public class CollisionArea implements GameCollisionRectangleContract,
     }
 
     /**
-     *     /**
      * Método responsável por definir o valor para o eixo do 
      * {@link CollisionArea#y Y}.
      * @param i O valor para o eixo do {@link CollisionArea#y Y}.

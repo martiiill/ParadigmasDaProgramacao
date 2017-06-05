@@ -10,7 +10,9 @@
 package Game.Management;
 
 import Game.Comparator.Comparator;
+import Game.Store;
 import Resources.Collection.ListManagementContract;
+import Resources.Exceptions.FileHandlingException;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -20,54 +22,115 @@ import java.util.Arrays;
 public class ListManagement implements Comparator, ListManagementContract,
         Serializable {
 
+    /**
+     * {@link ListManagement#numberOfObjects
+     * Numero de bjectos} do {@link ListManagement gestor} de objetos.
+     */
     private int numberOfObjects;
+    /**
+     * {@link ListManagement#objects Objetos} do {@link ListManagement gestor}.
+     */
     private Object[] objects;
 
     /**
-     * Método que permite instanciar uma lista tendo em conta um tamanho definido.
-     * @param size 
+     * Método que permite instanciar uma lista.
+     * @param numberOfObjects {@link ListManagement#numberOfObjects
+     * numero de objectos} do {@link ListManagement gestor}.
+     * @param objects {@link ListManagement#objects Objetos} do 
+     * {@link ListManagement gestor}.
+     */
+    public ListManagement(int numberOfObjects, Object[] objects) {
+        this.numberOfObjects = numberOfObjects;
+        this.objects = objects;
+    }
+    
+    /**
+     * Método que permite instanciar um {@link ListManagement gestor}
+     * tendo em conta um tamanho.
+     * @param size Tamanho que pretende dar. 
      */
     public ListManagement(int size) {
         this.objects = new Object[size];
     }
 
     /**
-     * Método construtor que permite instanciar uma lista tendo por base um
-     * conjunto de objetos
-     * @param objects
+     * Método construtor que permite instanciar um {@link ListManagement gestor}
+     * tendo por base um conjunto de objetos.
+     * @param objects{@link ListManagement#objects Objetos} do 
+     * {@link ListManagement gestor}.
      */
     public ListManagement(Object[] objects) {
         this.objects = objects;
     }
 
     /**
-     * Método construtor que permite instanciar uma lista tendo por base o seu
-     * tamanho por defeito.
+     * Método construtor que permite instanciar um {@link ListManagement gestor}
+     * tendo por base o seu tamanho por defeito.
      */
     public ListManagement() {
         this.objects = new Object[DEFAULT_SIZE];
     }
+    
+       /**
+     * Método que permite gravar num ficheiro um 
+     * {@link ListManagement gestor de objetos}.
+     * @param s O {@link ListManagement gestor de objetos} a gravar.
+     * @param st Ficheiro onde quer guardar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save(ListManagement s, String st) throws FileHandlingException{
+        Store ss = new Store();
+        ss.saveToFile(s, st);
+    }
 
+    /**
+     * Método responsável por retornar a
+     * {@link ListManagement#numberOfObjects número de objetos} 
+     * no {@link ListManagement gestor de objetos}.
+     * imagem da animação}
+     * @return {@link ListManagement#numberOfObjects Número de objetos}.
+     */
     public int getNumberOfObjects() {
         return numberOfObjects;
     }
 
+    /**
+     * Método responsável por definir o 
+     * {@link ListManagement#numberOfObjects número de objetos} no 
+     * {@link ListManagement gestor de objetos}.
+     * @param numberOfObjects {@link ListManagement#numberOfObjects 
+     * Número de objetos}.
+     */
     public void setNumberOfObjects(int numberOfObjects) {
         this.numberOfObjects = numberOfObjects;
     }
 
+    /**
+     * Método responsável por retornar os
+     * {@link ListManagement#objects objetos} 
+     * no {@link ListManagement gestor de objetos}.
+     * imagem da animação}
+     * @return {@link ListManagement#objects Objetos}.
+     */
     public Object[] getObjects() {
         return objects;
     }
 
+    /**
+     * Método responsável por definir o 
+     * {@link ListManagement#objects objetos} no 
+     * {@link ListManagement gestor de objetos}.
+     * @param objects {@link ListManagement#objects Objetos}.
+     */
     public void setObjects(Object[] objects) {
         this.objects = objects;
     }
 
     /**
-     * Método responsável por encontrar um objeto no vetor de objetos.
+     * Método responsável por encontrar um {@link ListManagement#objects objeto}
+     * no {@link ListManagement gestor de objetos}.
      *
-     * @param o objeto a procurar no vetor
+     * @param o objeto a procurar no {@link ListManagement gestor de objetos}.
      * @return o indice do objeto no vetor. No caso do elemento não existir,
      * deverá ser retornado o valor -1
      */
@@ -82,9 +145,10 @@ public class ListManagement implements Comparator, ListManagementContract,
     }
 
     /**
-     * Método responsável por inserir um objeto do vetor de objetos.
+     * Método responsável por inserir um {@link ListManagement#objects objeto} 
+     * do {@link ListManagement gestor de objetos}.
      *
-     * @param o objeto a inserir no vetor
+     * @param o objeto a inserir no {@link ListManagement gestor de objetos}.
      * @return Valor que sinaliza o sucesso/insucesso da operação
      */
     @Override
@@ -98,7 +162,8 @@ public class ListManagement implements Comparator, ListManagementContract,
     }
 
     /**
-     * Método responsável por remover um objeto do vetor de objetos.
+     * Método responsável por remover um {@link ListManagement#objects objeto} 
+     * do {@link ListManagement gestor de objetos}.
      *
      * @param i indice correspondente ao elemento a eliminar
      * @return o objeto eliminado
@@ -122,8 +187,9 @@ public class ListManagement implements Comparator, ListManagementContract,
     }
 
     /**
-     * Método responsável por retornar um objeto existente numa determinada
-     * posição do vetor de objetos.
+     * Método responsável por retornar um {@link ListManagement#objects objeto}
+     * existente numa determinada posição do {@link ListManagement
+     * gestor de objetos}.
      *
      * @param i indice do elemento a devolver
      * @return objeto do tipo Object
@@ -133,19 +199,23 @@ public class ListManagement implements Comparator, ListManagementContract,
         return objects[i];
     }
 
+    /**
+     * Método que permite obter uma representação textual de um 
+     * {@link ListManagement gestor de objetos}.
+     * @return Representação textual de um {@link ListManagement 
+     * gestor de objetos}.
+     */
     @Override
     public String toString() {
         return "ListManagement{" + "numberOfObjects=" + numberOfObjects +
                 ", objects=" + Arrays.toString(objects) + '}';
-    }
-    
-    
+    }  
 
     /**
-     * Método que permite comaparar dois objetos, dizendo se são iguais ou
-     * diferentes.
+     * Método que permite comaparar dois {@link ListManagement#objects objetos}, 
+     * dizendo se são iguais ou diferentes.
      *
-     * @param o Objecto a comparar.
+     * @param o  {@link ListManagement#objects Objeto} a comparar.
      * @return 0 se os objectos são iguais. 1 se sao diferentes,
      */
     @Override
@@ -178,9 +248,10 @@ public class ListManagement implements Comparator, ListManagementContract,
     }
 
     /**
-     *
-     * @param o
-     * @return
+     * Método que permite saber se existe ou não um 
+     * {@link ListManagement#objects objeto}.
+     * @param o  {@link ListManagement#objects Objeto}.
+     * @return valor que sinaliza o sucesso ou insucesso da operação.
      */
     public boolean hasObject(Object o) {
         for (int i = 0; i < this.numberOfObjects; i++) {
@@ -188,5 +259,4 @@ public class ListManagement implements Comparator, ListManagementContract,
         }
         return false;
     }
-
 }

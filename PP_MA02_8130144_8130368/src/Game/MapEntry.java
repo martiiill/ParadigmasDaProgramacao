@@ -11,13 +11,20 @@
 package Game;
 
 import Resources.Collection.MapEntryContract;
+import Resources.Exceptions.FileHandlingException;
 import java.io.Serializable;
 
 /**
  * Classe que representa uma estrutura que associa uma chave a um valor.
  */
 public class MapEntry implements MapEntryContract, Serializable{
+    /**
+     * A {@link MapEntry#key chave}.
+     */
     private Object key;
+    /**
+     * O {@link MapEntry#value valor}.
+     */
     private Object value;
 
     /**
@@ -29,13 +36,24 @@ public class MapEntry implements MapEntryContract, Serializable{
     public MapEntry(Object key, Object value) {
         this.key = key;
         this.value = value;
-    } 
-    
+    }
+ 
     /**
      * Método construtor vazio que permite instanciar uma 
      * {@link MapEntry entrada no mapa}.
      */
      public MapEntry() {}
+     
+     /**
+     * Método que permite gravar num ficheiro uma {@link MapEntry 
+     * entrada no mapa}.
+     * @param me A {@link MapEntry entrada no mapa} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+     public void save(MapEntry me) throws FileHandlingException{
+         Store s  = new Store();
+         s.saveToFile(me, "fic.txt");
+     }
 
      /**
       * Método que permite definir uma {@link MapEntry#key chave}.
@@ -81,7 +99,7 @@ public class MapEntry implements MapEntryContract, Serializable{
      */
     @Override
     public String toString() {
-        return "MapEntry{" + "key=" + key + ", value=" + value + '}';
+        return "MapEntry: " + "key=" + key + ", value=" + value + '}';
     }
     
     /**

@@ -10,6 +10,7 @@
 
 package Game;
 
+import Resources.Exceptions.FileHandlingException;
 import Resources.GameLevelContract;
 import Resources.GamePlayerContract;
 import Resources.GameScenarioContract;
@@ -52,6 +53,21 @@ public class Level implements GameLevelContract, Serializable{
         this.scenario = scenario;
         this.debug = debug;
     }
+    
+     /**
+     * Método que permite gravar num ficheiro um {@link Level nível}.
+     * @param l O {@link Level nível} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save (Level l) throws FileHandlingException{
+        Store s = new Store();
+        s.saveToFile(l, "fic.txt");
+    }
+    
+    /**
+     * Método construtor que permite criar uma instância de {@link Level nível}.
+     */
+    public Level(){}
 
     /**
      * Método responsável por definir um {@link Scenario cenário} num 

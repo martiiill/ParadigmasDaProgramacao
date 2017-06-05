@@ -9,6 +9,7 @@
  */
 package Game;
 
+import Resources.Exceptions.FileHandlingException;
 import Resources.Exceptions.ObjectException;
 import Resources.GameAnimationContract;
 import Resources.GameCollisionRectangleContract;
@@ -60,6 +61,7 @@ public class GameObject implements GameObjectContract, Serializable {
      * Uma {@link Animation animação} associado ao {@link GameObject objeto}.
      */
     private Animation animation;
+    
 
     /**
      * Método que permite criar uma instância de {@link GameObject objeto}, com
@@ -129,6 +131,16 @@ public class GameObject implements GameObjectContract, Serializable {
         this.colliding = colliding;
     }
     
+     /**
+     * Método que permite gravar num ficheiro um {@link GameObject objeto}.
+     * @param go O {@link GameObject objeto} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save(GameObject go) throws FileHandlingException{
+        Store s = new Store();
+        s.saveToFile(go, "fic.txt");
+    }
+    
     /**
      * Método que permite criar uma instância de {@link GameObject objeto} vazio.
      */
@@ -191,10 +203,10 @@ public class GameObject implements GameObjectContract, Serializable {
      */
     @Override
     public GameAnimationContract getAnimation() throws ObjectException {
-        if (animation == null) {
+        if (this.animation == null) {
             throw new ObjectException("O objeto é nulo");
         } else {
-            return animation;
+            return this.animation;
         }
     }
 

@@ -10,6 +10,7 @@
 package Game;
 
 import Game.Management.ListManagement;
+import Resources.Exceptions.FileHandlingException;
 import Resources.GameAnimationContract;
 import java.io.File;
 import java.io.Serializable;
@@ -40,29 +41,49 @@ public class Animation implements GameAnimationContract, Serializable {
      * Largura da {@link Animation imagem da animação}.
      */
     private int width;
-    
+
     /**
-     * 
+     * {@link ListManagement lista} de objetos que a
+     * {@link Animation imagem da animação} tem.
      */
     private ListManagement man;
 
     /**
-     * Método construtor que permite instanciar uma {@link Animation animação}.
-     *
+     * Método construtor que permite criar uma instância de {@link Animation
+     * imagem da animação}.
      * @param duration Duraçao da {@link Animation imagem da animação}.
-     * @param wi Largura da {@link Animation imagem da animação}.
-     * @param hei Altura da {@link Animation imagem da animação}.
+     * @param height Altura da {@link Animation imagem da animação}.
+     * @param width Largura da {@link Animation imagem da animação}.
      * @param imagePath Caminho da {@link Animation imagem da animação}.
+     * @throws Resources.Exceptions.FileHandlingException Excecao caso ocorra
+     * algum erro.
      */
-    public Animation(int duration, int wi, int hei, String imagePath) {
+    public Animation(int duration, int height, int width, String imagePath) throws FileHandlingException {
         this.imagePath = imagePath;
         this.duration = duration;
-        this.width = wi;
-        this.height = hei;
-        this.man = new ListManagement();
+        this.height = height;
+        this.width = width;
+        this.man = new ListManagement();   
     }
     
-     public Animation() {}
+    /**
+     * Método que permite gravar num ficheiro uma {@link Animation
+     * imagem da animação}.
+     * @param a A {@link Animation imagem da animação} a gravar.
+     * @throws FileHandlingException Excecao lançada caso ocorra algum erro.
+     */
+    public void save (Animation a) throws FileHandlingException{
+          Store s = new Store();
+           s.saveToFile(a, "fic.txt");
+    }
+
+    /**
+     * Método constutor vazio que permite instanciar uma
+     * {@link Animation imagem da animação}.
+     */
+    public Animation() {
+        this.man = new ListManagement();
+    }
 
     /**
      * Método responsável por ler um conjunto de imagens a partir de uma pasta.
@@ -75,12 +96,15 @@ public class Animation implements GameAnimationContract, Serializable {
      */
     @Override
     public void loadImagesFromFolder() throws InvalidPathException {
-        File folder = new File("images");
-        File[] listOfFiles = folder.listFiles();
+      
+       File folder = new File("Moodle2017PP\\assets\\PlayerAnimation");
+       String pasta = folder + "\\up";
+       File folder2 = new File(pasta);
+       File[] listOfFiles = folder2.listFiles(); 
 
         for (File listOfFile_ : listOfFiles) {
-            String s = listOfFile_.getAbsolutePath();    
-                this.man.addObject(s);
+            String s = listOfFile_.getPath();
+            this.man.addObject(s);
         }
     }
 
